@@ -51,6 +51,15 @@
         };
     };
 
+    combos {
+        compatible = "zmk,combos";
+
+        layer2 {
+            bindings = <&tog 2>;
+            key-positions = <37 38>;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
@@ -111,11 +120,11 @@
             //                                           | SHIFT | SPACE | LOWER |                   | RAISE | SPACE | BKSPC |
 
             bindings = <
-&bt BT_CLR  &bt BT_CLR  &bt BT_CLR_ALL  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4                          &kp F6  &kp F7     &kp F8     &kp F9   &kp F10   &kp F11         &msc SCRL_UP    &bootloader
-&kp LC(C)   &trans      &kp TAB         &kp Q         &kp W         &kp E         &kp R         &kp T                                 &kp Y   &kp U      &kp I      &kp O    &kp P     &mkp MCLK       &msc SCRL_DOWN  &mkp RCLK
-            &kp LGUI    &kp CAPS        &kp A         &kp S         &kp D         &kp F         &kp G                                 &kp H   &kp J      &kp K      &kp L    &kp SEMI  &mkp LCLK       &mmv MOVE_UP
-&mo 0       &kp LCTRL   &kp LALT        &kp Z         &kp X         &kp C         &kp V         &kp B         &kp C_MUTE  &kp C_MUTE  &kp N   &kp M      &kp COMMA  &kp DOT  &kp FSLH  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT
-                                                                    &kp LSHFT     &kp SPACE     &trans                                &trans  &kp SPACE  &kp DEL
+&bt BT_CLR  &bt BT_CLR  &bt BT_CLR_ALL  &bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2     &bt BT_SEL 3  &bt BT_SEL 4                          &kp F6     &kp F7     &kp F8     &kp F9   &kp F10   &kp F11         &msc SCRL_UP    &bootloader
+&kp LC(C)   &trans      &none           &kp Q           &mmv MOVE_UP    &kp E            &kp R         &kp T                                 &kp Y      &kp U      &kp I      &kp O    &kp P     &mkp MCLK       &msc SCRL_DOWN  &mkp RCLK
+            &kp LGUI    &none           &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &kp F         &kp G                                 &kp H      &kp J      &kp K      &kp L    &kp SEMI  &mkp LCLK       &mmv MOVE_UP
+&mo 0       &kp LCTRL   &none           &kp Z           &kp X           &kp C            &kp V         &kp B         &kp C_MUTE  &kp C_MUTE  &kp N      &kp M      &kp COMMA  &kp DOT  &kp FSLH  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT
+                                                                        &kp LSHFT        &kp SPACE     &trans                                &mkp LCLK  &mkp RCLK  &kp DEL
             >;
 
             sensor-bindings =
