@@ -1,7 +1,7 @@
 // Copyright (c) 2025 Timception
 // SPDX-License-Identifier: MIT
 
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500  // default: 600
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1200  // default: 600
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 120    // default: 10 - for encoder mouse-scroll to work
 
 #include <dt-bindings/zmk/mouse.h>
@@ -139,6 +139,7 @@
             //         | GUI    | CAPS      | A   |  S   |   D   |   F   |   G   |                   |   H   |   J   |   K   |  L  |  ;  | LEFT CLICK |   MOUSE UP  |
             // | PASTE | CTRL   | SHIFT     | Z   |  X   |   C   |   V   |   B   |  MUTE  | |  MUTE  |   N   |   M   |   ,   |  .  |  /  | MOUSE LEFT |  MOUSE DOWN | MOUSE RIGHT |
             //                                           | SHIFT | SPACE | LOWER |                   | RAISE | SPACE | BKSPC |
+
 
             display-name = "adjust";
             bindings = <
