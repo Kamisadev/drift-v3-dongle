@@ -40,7 +40,7 @@
 //  WORKSPACE NAV  (LOWER layer, far-left col)
 //  ──────────────
 //  Meta+← / Meta+→ = สลับ desktop ซ้าย/ขวา (KDE default)
-//  Meta+↑ / Meta+↓ = maximize / minimize
+//  Meta+↑ / Meta+↓ = maximize / minimize  
 //
 //  Key-position reference (0-based)
 //  ─────────────────────────────────
@@ -118,6 +118,33 @@
             #binding-cells = <0>;
             bindings = <&macro_tap &kp LG(DOWN)>;
         };
+
+        // Keyboard-first navigation helpers (mouse-free workflow)
+        app_next: app_switch_next {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp LA(TAB)>;
+        };
+        app_prev: app_switch_prev {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp LA(LS(TAB))>;
+        };
+        tab_next: tab_switch_next {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp LC(TAB)>;
+        };
+        tab_prev: tab_switch_prev {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp LC(LS(TAB))>;
+        };
+        tab_close: tab_close {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp LC(W)>;
+        };
     };
 
     behaviors {
@@ -145,13 +172,14 @@
         //  Fires modifier ONLY when opposite-hand key is pressed.
         //  Fast same-hand rolls ("as", "sd", "df") → ตัวอักษรปกติ
         //  Cross-hand combos (A + J) → GUI + Ctrl
+        //  Tuned for smoother Thai/EN mixed typing (less accidental holds).
         hml: homerow_mod_left {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "balanced";
-            tapping-term-ms = <280>;
+            tapping-term-ms = <240>;
             quick-tap-ms = <175>;
-            require-prior-idle-ms = <150>;
+            require-prior-idle-ms = <130>;
             bindings = <&kp>, <&kp>;
             hold-trigger-key-positions = <KEYS_R KEYS_T>;
             hold-trigger-on-release;
@@ -162,9 +190,9 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "balanced";
-            tapping-term-ms = <280>;
+            tapping-term-ms = <240>;
             quick-tap-ms = <175>;
-            require-prior-idle-ms = <150>;
+            require-prior-idle-ms = <130>;
             bindings = <&kp>, <&kp>;
             hold-trigger-key-positions = <KEYS_L KEYS_T>;
             hold-trigger-on-release;
@@ -175,7 +203,7 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "balanced";
-            tapping-term-ms = <200>;
+            tapping-term-ms = <190>;
             quick-tap-ms = <175>;
             bindings = <&mo>, <&kp>;
         };
@@ -193,12 +221,6 @@
 
     combos {
         compatible = "zmk,combos";
-
-        // Toggle RAISE with W+E (positions 20=W, 21=E)
-        raise_toggle {
-            bindings = <&tog 2>;
-            key-positions = <20 21>;
-        };
 
         // CapsWord: press both SHIFT positions (D=36 and K=41) simultaneously
         caps_word_combo {
@@ -288,8 +310,8 @@
         // ║  LAYER 2 — RAISE  "F-keys + เมาส์"  (Enter ค้าง)               ║
         // ║                                                                  ║
         // ║  วิธีจำ:  มือซ้าย = เมาส์ WASD-style + BT                     ║
-        // ║           มือขวา = F1-F12 (เรียงตามแถว)                        ║
-        // ║  Far-right = scroll / click                                      ║
+        // ║           มือขวา = F1-F12 + HJKL click/scroll + NM,./ app/tab   ║
+        // ║  ลดการเอื้อมนิ้วก้อยขวา เพิ่มความสมดุลสองมือ                  ║
         // ║  Far-left bottom = media controls (prev/play/next)              ║
         // ╚══════════════════════════════════════════════════════════════════╝
         raise_layer {
@@ -300,9 +322,9 @@
             // ├──────────┼────────┼──────────┼────────┼────────┼────────┼────────┼────────┤                    ├──────┼──────┼──────┼──────┼──────┼──────┼───────────┼───────────┤
             // │  none    │  none  │   none   │  none  │ M_UP   │  none  │  none  │  none  │                    │  F7  │  F8  │  F9  │ F10  │ F11  │ F12  │ SCRL_DN   │ R_CLICK   │
             // ├──────────┼────────┼──────────┼────────┼────────┼────────┼────────┼────────┤                    ├──────┼──────┼──────┼──────┼──────┼──────┼───────────┘
-            // │          │  none  │   none   │ M_LEFT │ M_DOWN │M_RIGHT │  none  │  none  │                    │ none │ none │ none │ none │ none │LCLK  │  M_UP     │
+            // │          │  none  │   none   │ M_LEFT │ M_DOWN │M_RIGHT │  none  │  none  │                    │none │LCLK │RCLK │SC↑  │SC↓  │ none │  M_UP     │
             // ├──────────┼────────┼──────────┼────────┼────────┼────────┼────────┼────────┼────────┐  ┌────────┼──────┼──────┼──────┼──────┼──────┼──────┼───────────┼───────────┤
-            // │  BASE    │ C_PREV │  C_PP    │ C_NEXT │  CUT   │  COPY  │ PASTE  │  none  │  MUTE  │  │  MUTE  │ none │ none │ none │ none │  /   │M_LFT │  M_DOWN   │  M_RIGHT  │
+            // │  BASE    │ C_PREV │  C_PP    │ C_NEXT │  CUT   │  COPY  │ PASTE  │  none  │  MUTE  │  │  MUTE  │App← │App→ │Tab← │Tab→ │TCLS │M_LFT │  M_DOWN   │  M_RIGHT  │
             // └──────────┴────────┴──────────┴────────┴────────┴────────┴────────┴────────┴────────┘  └────────┴──────┴──────┴──────┴──────┴──────┴──────┴───────────┴───────────┘
             //                                               ┌────────┬──────────┬────────┐           ┌────────┬──────────┬──────┐
             //                                               │ SHIFT  │  SPACE   │  LGUI  │           │ L_CLK  │  R_CLK   │ BSPC │
@@ -311,8 +333,8 @@
             bindings = <
 &bt BT_CLR   &bt BT_CLR   &bt BT_CLR_ALL  &bt BT_SEL 0    &bt BT_SEL 1    &bt BT_SEL 2     &bt BT_SEL 3   &bt BT_SEL 4                                  &kp F1    &kp F2    &kp F3    &kp F4    &kp F5    &kp F6    &msc SCRL_UP    &bootloader
 &none        &none        &none           &none           &mmv MOVE_UP    &none            &none          &none                                         &kp F7    &kp F8    &kp F9    &kp F10   &kp F11   &kp F12   &msc SCRL_DOWN  &mkp RCLK
-             &none        &none           &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &none          &none                                         &none     &none     &none     &none     &none     &mkp LCLK &kp UP_ARROW
-&mo 0        &kp C_PREV   &kp C_PP        &kp C_NEXT      &kp LC(X)       &kp LC(C)        &kp LC(V)      &none          &kp C_MUTE    &kp C_MUTE       &none     &none     &none     &none     &kp FSLH  &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT
+             &none        &none           &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &none          &none                                         &none     &mkp LCLK &mkp RCLK &msc SCRL_UP &msc SCRL_DOWN &none  &kp UP_ARROW
+&mo 0        &kp C_PREV   &kp C_PP        &kp C_NEXT      &kp LC(X)       &kp LC(C)        &kp LC(V)      &none          &kp C_MUTE    &kp C_MUTE       &app_prev &app_next &tab_prev &tab_next &tab_close &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT
                                                           &kp LSFT        &kp SPACE        &kp LGUI                                                     &mkp LCLK &mkp RCLK &kp BSPC
             >;
 
